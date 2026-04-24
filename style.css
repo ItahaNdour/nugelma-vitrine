@@ -1,139 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500&display=swap');
+
 :root {
     --gold: #c5a059;
-    --dark: #1a1a1a;
-    --light: #f9f9f9;
+    --dark: #121212;
     --white: #ffffff;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    --bg: #fdfdfd;
 }
 
 body {
-    background-color: var(--light);
-    color: var(--dark);
-    padding-bottom: 100px; /* Espace pour la barre de panier fixe */
+    background-color: var(--bg);
+    font-family: 'Poppins', sans-serif;
+    max-width: 500px; /* Force le look "Mobile" même sur ordinateur */
+    margin: 0 auto;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    min-height: 100vh;
 }
 
 header {
-    background: var(--white);
-    padding: 20px;
+    padding: 40px 20px;
     text-align: center;
-    border-bottom: 1px solid #eee;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: var(--white);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: 3px;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--dark);
+    letter-spacing: 4px;
+    text-transform: uppercase;
 }
 
-/* Navigation Catégories */
+/* Boutons Catégories élégants */
 .categories {
     display: flex;
     overflow-x: auto;
-    padding: 15px;
-    gap: 10px;
+    padding: 10px 20px;
+    gap: 12px;
     background: var(--white);
-    scrollbar-width: none; /* Cache la barre sur Firefox */
+    position: sticky;
+    top: 0;
+    z-index: 50;
 }
 
-.categories::-webkit-scrollbar { display: none; } /* Cache sur Chrome/Safari */
-
 .cat-btn {
-    padding: 10px 20px;
-    border: 1px solid var(--dark);
-    background: transparent;
-    border-radius: 25px;
-    white-space: nowrap;
+    padding: 8px 18px;
+    border: 1px solid #e0e0e0;
+    background: white;
+    border-radius: 4px;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .cat-btn.active {
     background: var(--dark);
-    color: var(--white);
+    color: white;
+    border-color: var(--dark);
 }
 
-/* Catalogue */
+/* Grille de produits rectifiée */
 .catalog {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur mobile */
+    grid-template-columns: 1fr 1fr;
     gap: 15px;
-    padding: 15px;
+    padding: 20px;
 }
 
 .product-card {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    background: white;
+    border-radius: 0; /* Look plus éditorial/moderne */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
 .product-img {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 4/5; /* Format portrait plus premium */
     object-fit: cover;
-    border-radius: 8px;
-    background: #eee;
+    background: #f0f0f0; /* Couleur d'attente si image absente */
 }
 
 .product-card h3 {
     font-size: 0.9rem;
-    margin: 10px 0 5px;
-}
-
-.frais-tag {
-    font-size: 0.65rem;
-    color: #d9534f;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-weight: 500;
+    margin: 10px 0 2px;
+    padding: 0 5px;
 }
 
 .price {
+    font-weight: 600;
     color: var(--gold);
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 0.95rem;
+    padding: 0 5px 10px;
 }
 
 .add-btn {
-    margin-top: auto;
     background: var(--dark);
     color: white;
     border: none;
-    padding: 8px;
-    border-radius: 6px;
+    padding: 12px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
 }
 
-/* Barre de Panier */
+/* Barre de commande flottante */
 .cart-bar {
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 460px;
     background: var(--dark);
     color: white;
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .checkout-btn {
     background: var(--gold);
-    border: none;
     color: white;
-    padding: 12px 18px;
-    border-radius: 8px;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
     font-weight: bold;
-    cursor: pointer;
 }
