@@ -3,70 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nugelma | Showroom Digital</title>
+    <title>Nugelma | Luxury Showroom</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --nugelma-gold: #D4AF37;
+            --nugelma-dark: #1A1A1A;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #FAFAFA;
+        }
         .font-serif { font-family: 'Playfair Display', serif; }
-        .font-sans { font-family: 'Montserrat', sans-serif; }
-        .product-card:hover .add-overlay { opacity: 1; }
-        /* Animation pour le panier */
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .animate-slide-up { animation: slideUp 0.4s ease-out; }
+        
+        /* Supprime la barre de défilement pour un look app */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Carte Produit Style Merixstudio - Grande et Imposante */
+        .card-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+        }
+        .product-card img {
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .product-card:hover img {
+            transform: scale(1.08);
+        }
     </style>
 </head>
-<body class="bg-[#FAFAFA] font-sans text-[#4A4A4A]">
+<body class="text-[#1A1A1A] antialiased">
 
-    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="text-2xl font-serif font-bold tracking-tighter text-[#1A1A1A]">NUGELMA</div>
-            <div class="relative">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1A1A1A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                <span id="cart-badge" class="absolute -top-2 -right-2 bg-[#D4AF37] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+    <header class="sticky top-0 z-50 bg-[#FAFAFA]/90 backdrop-blur-xl border-b border-gray-100/50">
+        <div class="max-w-screen-xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#1A1A1A] rounded-2xl flex items-center justify-center text-[#D4AF37] font-extrabold text-2xl shadow-2xl rotate-3">N</div>
+                <h1 class="text-2xl font-serif tracking-tight font-bold italic">Nugelma</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="relative bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#D4AF37] text-white text-[10px] w-6 h-6 flex items-center justify-center rounded-full border-2 border-white font-bold">0</span>
+                </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <section class="relative h-[50vh] flex items-center justify-center overflow-hidden mt-16">
-        <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1500&q=80" class="absolute w-full h-full object-cover" alt="Hero">
-        <div class="absolute inset-0 bg-black/40"></div>
-        <div class="relative text-center text-white px-4">
-            <h1 class="text-4xl md:text-5xl font-serif mb-4">L'excellence Nugelma</h1>
-            <p class="text-lg font-light tracking-wide">Directement de notre atelier à votre table.</p>
-        </div>
-    </section>
+    <main class="max-w-screen-xl mx-auto pb-40">
+        <section class="px-6 pt-12 pb-8">
+            <p class="text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[10px] mb-3">Excellence & Tradition</p>
+            <h2 class="text-5xl md:text-7xl font-serif leading-[1.1] font-bold">L'art de la <br><span class="text-[#D4AF37]">Pâtisserie Fine.</span></h2>
+        </section>
 
-    <div class="sticky top-16 bg-[#FAFAFA] z-40 py-6">
-        <div class="flex gap-4 overflow-x-auto px-4 justify-start md:justify-center no-scrollbar">
-            <button onclick="filter('all', this)" class="filter-btn active px-6 py-2 rounded-full border border-[#1A1A1A] bg-[#1A1A1A] text-white text-xs font-semibold uppercase tracking-widest transition-all">Tous</button>
-            <button onclick="filter('Pâtisserie', this)" class="filter-btn px-6 py-2 rounded-full border border-gray-200 bg-white text-[#1A1A1A] text-xs font-semibold uppercase tracking-widest hover:border-[#1A1A1A] transition-all">Pâtisserie</button>
-            <button onclick="filter('Frais', this)" class="filter-btn px-6 py-2 rounded-full border border-gray-200 bg-white text-[#1A1A1A] text-xs font-semibold uppercase tracking-widest hover:border-[#1A1A1A] transition-all">Frais</button>
-            <button onclick="filter('Maison', this)" class="filter-btn px-6 py-2 rounded-full border border-gray-200 bg-white text-[#1A1A1A] text-xs font-semibold uppercase tracking-widest hover:border-[#1A1A1A] transition-all">Maison</button>
-        </div>
-    </div>
+        <nav class="flex gap-4 overflow-x-auto px-6 py-6 no-scrollbar sticky top-24 z-40">
+            <button onclick="filter('all', this)" class="cat-btn bg-[#1A1A1A] text-white px-8 py-4 rounded-[1.8rem] text-sm font-bold shadow-2xl shadow-black/20 whitespace-nowrap">Tout voir</button>
+            <button onclick="filter('Pâtisserie', this)" class="cat-btn bg-white text-gray-400 border border-gray-100 px-8 py-4 rounded-[1.8rem] text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-all">Pâtisserie</button>
+            <button onclick="filter('Frais', this)" class="cat-btn bg-white text-gray-400 border border-gray-100 px-8 py-4 rounded-[1.8rem] text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-all">Produits Frais</button>
+            <button onclick="filter('Maison', this)" class="cat-btn bg-white text-gray-400 border border-gray-100 px-8 py-4 rounded-[1.8rem] text-sm font-bold whitespace-nowrap hover:bg-gray-50 transition-all">Déco & Maison</button>
+        </nav>
 
-    <main class="max-w-7xl mx-auto px-4 pb-32">
-        <div id="catalog" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div id="catalog" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-6">
             </div>
     </main>
 
-    <div id="cart-bar" class="fixed bottom-6 left-4 right-4 md:left-auto md:right-8 md:w-96 bg-[#1A1A1A] text-white p-5 rounded-2xl shadow-2xl z-50 transform translate-y-full transition-transform duration-500 hidden">
-        <div class="flex justify-between items-center mb-4">
-            <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Votre Sélection</span>
-            <span id="items-count" class="text-xs bg-[#D4AF37] px-2 py-0.5 rounded">0 articles</span>
+    <div id="checkout-bar" class="fixed bottom-10 left-6 right-6 md:left-auto md:right-10 md:w-[450px] translate-y-[200%] transition-all duration-700 z-50">
+        <div class="bg-[#1A1A1A] rounded-[3rem] p-8 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] flex items-center justify-between border border-white/5">
+            <div>
+                <p class="text-gray-500 text-[10px] uppercase tracking-[0.3em] font-black mb-1">Votre Sélection</p>
+                <p id="total-price" class="text-white text-2xl font-bold font-serif">0 FCFA</p>
+            </div>
+            <button onclick="sendOrder()" class="bg-[#D4AF37] text-white px-10 py-5 rounded-[2rem] font-extrabold text-sm flex items-center gap-3 active:scale-95 transition-all shadow-lg hover:brightness-110">
+                COMMANDER
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
-        <div class="flex justify-between items-end mb-6">
-            <span class="text-gray-400 text-xs">Total estimé</span>
-            <span id="total-price" class="text-2xl font-serif text-[#D4AF37]">0 FCFA</span>
-        </div>
-        <button onclick="sendToWA()" class="w-full bg-[#D4AF37] hover:bg-[#b8962d] py-4 rounded-xl font-bold uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-3">
-            <span>Confirmer sur WhatsApp</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-        </button>
     </div>
 
     <script src="script.js"></script>
