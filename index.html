@@ -2,32 +2,32 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nugelma | Vitrine-Catalogue</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nugelma | Boutique</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <div class="logo">NUGELMA</div>
+        <h1 class="logo">NUGELMA</h1>
     </header>
 
-    <nav class="categories" id="category-bar">
-        <button class="cat-btn active" data-cat="all">Tous</button>
-        <button class="cat-btn" data-cat="Pâtisserie">Pâtisserie</button>
-        <button class="cat-btn" data-cat="Frais">Frais</button>
-        <button class="cat-btn" data-cat="Maison">Maison</button>
-    </nav>
+    <div class="filter-wrapper">
+        <nav class="categories">
+            <button class="cat-btn active" onclick="filterCat('all', this)">Tous</button>
+            <button class="cat-btn" onclick="filterCat('Pâtisserie', this)">Pâtisserie</button>
+            <button class="cat-btn" onclick="filterCat('Frais', this)">Frais</button>
+            <button class="cat-btn" onclick="filterCat('Maison', this)">Maison</button>
+        </nav>
+    </div>
 
-    <main class="catalog" id="catalog-container">
-        </main>
+    <main class="products-grid" id="catalog"></main>
 
-    <div class="cart-bar">
-        <div class="cart-info">
-            <span id="cart-count">0</span> article(s) | 
-            <strong><span id="total-price">0</span> FCFA</strong>
+    <div class="cart-float">
+        <div class="cart-total">
+            <span id="count">0</span> articles | <span id="total">0</span> FCFA
         </div>
-        <button class="checkout-btn" id="whatsapp-btn">Commander sur WhatsApp</button>
+        <button class="btn-whatsapp" onclick="sendOrder()">Commander</button>
     </div>
 
     <script src="script.js"></script>
