@@ -2,32 +2,37 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nugelma | Boutique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nugelma | Showroom Digital</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <h1 class="logo">NUGELMA</h1>
-    </header>
+        <div class="logo-placeholder">NUGELMA</div>
+        </header>
 
-    <div class="filter-wrapper">
-        <nav class="categories">
-            <button class="cat-btn active" onclick="filterCat('all', this)">Tous</button>
-            <button class="cat-btn" onclick="filterCat('Pâtisserie', this)">Pâtisserie</button>
-            <button class="cat-btn" onclick="filterCat('Frais', this)">Frais</button>
-            <button class="cat-btn" onclick="filterCat('Maison', this)">Maison</button>
-        </nav>
-    </div>
+    <section class="hero">
+        <h2>L'excellence Nugelma, directement chez vous.</h2>
+        <p>Une expérience sensorielle unique à Dakar</p>
+    </section>
 
-    <main class="products-grid" id="catalog"></main>
+    <nav class="filter-bar">
+        <button class="cat-btn active" onclick="filterCat('all', this)">Tous</button>
+        <button class="cat-btn" onclick="filterCat('Pâtisserie', this)">Pâtisserie</button>
+        <button class="cat-btn" onclick="filterCat('Frais', this)">Frais</button>
+        <button class="cat-btn" onclick="filterCat('Maison', this)">Maison</button>
+    </nav>
+
+    <main class="catalog" id="catalog"></main>
 
     <div class="cart-float">
-        <div class="cart-total">
-            <span id="count">0</span> articles | <span id="total">0</span> FCFA
+        <div class="total-box">
+            <span id="cart-count">0</span> ARTICLES | <span id="cart-total">0</span> FCFA
         </div>
-        <button class="btn-whatsapp" onclick="sendOrder()">Commander</button>
+        <button class="checkout-btn" onclick="processOrder(this)">
+            Commander sur WhatsApp
+        </button>
     </div>
 
     <script src="script.js"></script>
