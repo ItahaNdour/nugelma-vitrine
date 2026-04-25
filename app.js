@@ -159,29 +159,34 @@ function hasFreshMarketProduct() {
 
 function getTodayDateString() {
   const today = new Date();
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
   return today.toISOString().split("T")[0];
 }
 
 function getTomorrowDateString() {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setMinutes(tomorrow.getMinutes() - tomorrow.getTimezoneOffset());
   return tomorrow.toISOString().split("T")[0];
 }
 
 function applyFreshRule() {
-  if (hasFreshMarketProduct()) {
-    deliveryDate.min = getTomorrowDateString();
+  const today = getTodayDateString();
+  const tomorrow = getTomorrowDateString();
 
-    if (!deliveryDate.value || deliveryDate.value < getTomorrowDateString()) {
-      deliveryDate.value = getTomorrowDateString();
+  if (hasFreshMarketProduct()) {
+    deliveryDate.min = tomorrow;
+
+    if (!deliveryDate.value || deliveryDate.value <= today) {
+      deliveryDate.value = tomorrow;
     }
 
     freshNotice.classList.remove("hidden");
   } else {
-    deliveryDate.min = getTodayDateString();
+    deliveryDate.min = today;
 
     if (!deliveryDate.value) {
-      deliveryDate.value = getTodayDateString();
+      deliveryDate.value = today;
     }
 
     freshNotice.classList.add("hidden");
@@ -323,7 +328,7 @@ function prepareWhatsAppMessage() {
   finalWhatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
-function openThankYouPopup() {
+function openPaymentPopup() {
   if (!validateForm()) return;
 
   prepareWhatsAppMessage();
@@ -386,7 +391,7 @@ cartModal.addEventListener("click", event => {
 
 deliveryZone.addEventListener("change", renderCartModal);
 deliveryDate.addEventListener("change", applyFreshRule);
-confirmButton.addEventListener("click", openThankYouPopup);
+confirmButton.addEventListener("click", openPaymentPopup);
 continueWhatsappButton.addEventListener("click", continueToWhatsApp);
 
 closeThankYouModal.addEventListener("click", () => {
@@ -394,6 +399,25 @@ closeThankYouModal.addEventListener("click", () => {
 });
 
 clearCartButton.addEventListener("click", clearCart);
+
+document.querySelectorAll(".copy-btn").forEach(button => {
+  button.addEventListener("click", async () => {
+    const numberToCopy = button.dataset.copy;
+
+    try {
+      await navigator.clipboard.writeText(numberToCopy);
+      button.textContent = "✅ Copié";
+      button.classList.add("copied");
+
+      setTimeout(() => {
+        button.textContent = "📋 Copier";
+        button.classList.remove("copied");
+      }, 1800);
+    } catch (error) {
+      alert("Impossible de copier automatiquement. Veuillez copier le numéro manuellement.");
+    }
+  });
+});
 
 displayProducts(products);
 updateCart();
