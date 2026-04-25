@@ -26,14 +26,14 @@
     <div class="hero-content">
       <p class="hero-label">Pâtisserie • Décoration • Marché frais</p>
       <h1>L’excellence Nugelma, livrée avec soin.</h1>
-      <p class="hero-text">Sélectionnez vos produits, validez votre panier et finalisez sur WhatsApp.</p>
+      <p class="hero-text">Sélectionnez vos produits premium et finalisez votre commande sur WhatsApp.</p>
     </div>
   </section>
 
   <section class="process">
     <div>✨<span>Sélection</span></div>
-    <div>💳<span>Paiement</span></div>
-    <div>🛒<span>Achat frais</span></div>
+    <div>💳<span>Paiement Wave/OM</span></div>
+    <div>🛒<span>Achat fraîcheur</span></div>
     <div>🚚<span>Livraison</span></div>
   </section>
 
@@ -57,30 +57,55 @@
       <div id="cartItems"></div>
 
       <form id="orderForm" class="order-form">
-        <input id="customerName" type="text" placeholder="Nom complet" required>
+        <label>
+          Nom complet
+          <input id="customerName" type="text" required />
+        </label>
 
-        <input id="customerWhatsapp" type="tel" placeholder="Numéro WhatsApp" required>
-        <small>Pour l’envoi de la localisation et de la preuve de paiement.</small>
+        <label>
+          Numéro WhatsApp
+          <input id="customerWhatsapp" type="tel" required />
+          <small>Pour l’envoi de la localisation et le suivi.</small>
+        </label>
 
-        <select id="deliveryZone" required>
-          <option value="">Sélectionnez votre quartier</option>
-          <option value="Dakar Centre" data-fee="2000">Zone 1 - Dakar Centre : 2 000 FCFA</option>
-          <option value="Banlieue Proche" data-fee="2500">Zone 2 - Banlieue Proche : 2 500 FCFA</option>
-          <option value="Grande Banlieue" data-fee="3500">Zone 3 - Grande Banlieue : 3 500 FCFA</option>
-          <option value="Rufisque / Diamniadio" data-fee="devis">Zone 4 - Rufisque/Diamniadio : Sur devis</option>
-        </select>
+        <label>
+          Date de livraison
+          <input id="deliveryDate" type="date" required />
+        </label>
 
-        <textarea id="customerAddress" placeholder="Adresse précise : villa n°, à côté de..." required></textarea>
+        <label>
+          Quartier & tarif de livraison
+          <select id="deliveryZone" required>
+            <option value="">Sélectionnez votre zone</option>
+            <option value="Zone 1 - Dakar Centre" data-fee="2000">Zone 1 - Dakar Centre : 2 000 FCFA</option>
+            <option value="Zone 2 - Banlieue Proche" data-fee="2500">Zone 2 - Banlieue Proche : 2 500 FCFA</option>
+            <option value="Zone 3 - Grande Banlieue" data-fee="3500">Zone 3 - Grande Banlieue : 3 500 FCFA</option>
+            <option value="Zone 4 - Rufisque/Diamniadio" data-fee="devis">Zone 4 - Rufisque/Diamniadio : Sur devis</option>
+          </select>
+        </label>
 
-        <select id="paymentOption" required>
-          <option value="">Option de paiement</option>
-          <option value="Paiement intégral 100% Wave/OM">Paiement intégral 100% Wave/OM</option>
-          <option value="Acompte 50% - reste à la livraison">Acompte 50% - reste à la livraison</option>
-        </select>
+        <label>
+          Adresse précise
+          <textarea id="customerAddress" placeholder="Villa, étage, repères..." required></textarea>
+        </label>
+
+        <div class="payment-choice">
+          <p>Option de paiement</p>
+
+          <label>
+            <input type="radio" name="paymentOption" value="Paiement intégral 100%" required />
+            Paiement intégral 100%
+          </label>
+
+          <label>
+            <input type="radio" name="paymentOption" value="Acompte 50% obligatoire" required />
+            Acompte de 50% obligatoire
+          </label>
+        </div>
       </form>
 
       <p id="freshNotice" class="fresh-notice hidden">
-        Achat le matin pour fraîcheur garantie : livraison demain J+1.
+        Marché frais détecté : pour garantir la fraîcheur, la livraison est possible à partir de demain J+1.
       </p>
 
       <div class="cart-summary">
@@ -94,22 +119,12 @@
       </div>
 
       <div class="cart-summary total">
-        <span>Total à payer :</span>
+        <span>Total général :</span>
         <strong id="modalTotal">0 FCFA</strong>
       </div>
 
-      <div class="payment-box">
-        <p><strong>Coordonnées Wave/OM boutique :</strong></p>
-        <p>Wave : +221 77 000 00 00</p>
-        <p>Orange Money : +221 78 000 00 00</p>
-      </div>
-
-      <p class="payment-note">
-        Validation immédiate après paiement Wave/OM pour garantir la fraîcheur de vos produits.
-      </p>
-
       <button id="confirmButton" class="whatsapp-btn">
-        Confirmer sur WhatsApp
+        Confirmer ma commande
       </button>
 
       <button id="clearCartButton" class="clear-btn">
@@ -121,13 +136,16 @@
   <div id="thankYouModal" class="modal hidden">
     <div class="thankyou-content">
       <h2>Merci de votre confiance ! ✨</h2>
-      <p>Votre panier est prêt. En cliquant sur le bouton ci-dessous, vous allez nous transmettre votre commande sur WhatsApp.</p>
 
-      <ul>
-        <li><strong>Vérification :</strong> nous confirmons la disponibilité de vos produits.</li>
-        <li><strong>Paiement :</strong> envoi des coordonnées Wave/OM pour validation.</li>
-        <li><strong>Logistique :</strong> prise de contact pour fixer l’heure exacte de livraison.</li>
-      </ul>
+      <p>
+        Votre panier est prêt. Prochaines étapes : nous confirmons la disponibilité,
+        vous effectuez le dépôt, et nous vous appelons pour l’heure exacte de livraison.
+      </p>
+
+      <div class="payment-numbers">
+        <p><strong>Wave :</strong> +221 77 000 00 00</p>
+        <p><strong>Orange Money :</strong> +221 78 000 00 00</p>
+      </div>
 
       <button id="continueWhatsappButton" class="whatsapp-btn">
         Continuer vers WhatsApp
