@@ -68,12 +68,12 @@ body {
 }
 
 .hero {
-  height: 42vh;
-  min-height: 285px;
-  max-height: 380px;
+  height: 38vh;
+  min-height: 255px;
+  max-height: 350px;
   background:
-    linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.55)),
-    url("https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=1200&q=70");
+    linear-gradient(rgba(0,0,0,0.64), rgba(0,0,0,0.56)),
+    url("https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=65");
   background-size: cover;
   background-position: center;
   color: var(--white);
@@ -82,22 +82,17 @@ body {
   padding: 22px 16px;
 }
 
-.hero-content {
-  max-width: 460px;
-}
-
 .hero-label {
   color: var(--gold);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
   margin-bottom: 10px;
 }
 
 .hero h1 {
   font-family: "Playfair Display", serif;
-  font-size: 32px;
+  font-size: 31px;
   line-height: 1.05;
   margin-bottom: 10px;
 }
@@ -106,6 +101,29 @@ body {
   font-size: 13px;
   line-height: 1.5;
   color: #f2f2f2;
+}
+
+.process {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 12px;
+  background: var(--white);
+  border-bottom: 1px solid #eee;
+}
+
+.process div {
+  text-align: center;
+  color: var(--gold);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.process span {
+  display: block;
+  color: var(--black);
+  font-size: 9px;
+  margin-top: 4px;
 }
 
 .filters {
@@ -154,7 +172,7 @@ body {
 
 .product-card img {
   width: 100%;
-  height: 135px;
+  height: 132px;
   object-fit: cover;
   display: block;
   background: #eee;
@@ -205,11 +223,6 @@ body {
   cursor: pointer;
 }
 
-.add-btn:active {
-  transform: scale(0.98);
-  background: var(--gold);
-}
-
 .modal {
   position: fixed;
   inset: 0;
@@ -224,7 +237,8 @@ body {
   display: none;
 }
 
-.modal-content {
+.modal-content,
+.thankyou-content {
   width: 100%;
   max-height: 88vh;
   overflow-y: auto;
@@ -244,10 +258,11 @@ body {
   cursor: pointer;
 }
 
-.modal-content h2 {
+.modal-content h2,
+.thankyou-content h2 {
   font-family: "Playfair Display", serif;
   font-size: 28px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .cart-item {
@@ -285,22 +300,62 @@ body {
   cursor: pointer;
 }
 
+.order-form {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.order-form input,
+.order-form textarea,
+.order-form select {
+  width: 100%;
+  border: 1.5px solid #ddd;
+  border-radius: 14px;
+  padding: 13px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.order-form textarea {
+  min-height: 74px;
+  resize: vertical;
+}
+
+.order-form small {
+  color: var(--gray);
+  font-size: 11px;
+  margin-top: -5px;
+}
+
 .cart-summary {
   display: flex;
   justify-content: space-between;
-  font-size: 18px;
-  margin: 18px 0;
+  font-size: 15px;
+  margin: 10px 0;
 }
 
-.payment-note {
+.cart-summary.total {
+  font-size: 18px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.fresh-notice,
+.payment-note,
+.payment-box {
   background: var(--light-gold);
   border-left: 4px solid var(--gold);
-  padding: 14px;
+  padding: 13px;
   border-radius: 15px;
   font-size: 13px;
   line-height: 1.5;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin: 12px 0;
+}
+
+.payment-box p {
+  margin-bottom: 4px;
 }
 
 .whatsapp-btn,
@@ -325,18 +380,26 @@ body {
   color: var(--black);
 }
 
+.thankyou-content p,
+.thankyou-content li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--black);
+}
+
+.thankyou-content ul {
+  margin: 16px 0;
+  padding-left: 18px;
+}
+
 @media (min-width: 768px) {
   .hero {
-    height: 58vh;
+    height: 52vh;
     padding: 50px 8%;
   }
 
   .hero h1 {
     font-size: 56px;
-  }
-
-  .hero-text {
-    font-size: 16px;
   }
 
   .products-grid {
@@ -350,36 +413,13 @@ body {
     height: 230px;
   }
 
-  .product-info {
-    padding: 18px;
-  }
-
-  .product-title {
-    font-size: 24px;
-  }
-
-  .product-description {
-    font-size: 14px;
-  }
-
-  .product-price {
-    font-size: 17px;
-  }
-
-  .add-btn {
-    font-size: 14px;
-  }
-
-  .filters {
-    justify-content: center;
-  }
-
   .modal {
     align-items: center;
   }
 
-  .modal-content {
-    max-width: 540px;
+  .modal-content,
+  .thankyou-content {
+    max-width: 560px;
     border-radius: 28px;
   }
 }
