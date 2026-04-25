@@ -15,6 +15,7 @@
 <body>
   <header class="top-header">
     <div class="logo">NUGELMA</div>
+
     <button id="cartButton" class="cart-button">
       🛒 <span id="cartCount">0</span>
       <strong id="cartTotal">0 FCFA</strong>
@@ -25,8 +26,15 @@
     <div class="hero-content">
       <p class="hero-label">Pâtisserie • Décoration • Marché frais</p>
       <h1>L’excellence Nugelma, livrée avec soin.</h1>
-      <p class="hero-text">Commandez vos produits premium et validez votre achat sur WhatsApp.</p>
+      <p class="hero-text">Sélectionnez vos produits, validez votre panier et finalisez sur WhatsApp.</p>
     </div>
+  </section>
+
+  <section class="process">
+    <div>✨<span>Sélection</span></div>
+    <div>💳<span>Paiement</span></div>
+    <div>🛒<span>Achat frais</span></div>
+    <div>🚚<span>Livraison</span></div>
   </section>
 
   <main>
@@ -48,21 +56,85 @@
 
       <div id="cartItems"></div>
 
+      <form id="orderForm" class="order-form">
+        <input id="customerName" type="text" placeholder="Nom complet" required>
+
+        <input id="customerWhatsapp" type="tel" placeholder="Numéro WhatsApp" required>
+        <small>Pour l’envoi de la localisation et de la preuve de paiement.</small>
+
+        <select id="deliveryZone" required>
+          <option value="">Sélectionnez votre quartier</option>
+          <option value="Dakar Centre" data-fee="2000">Zone 1 - Dakar Centre : 2 000 FCFA</option>
+          <option value="Banlieue Proche" data-fee="2500">Zone 2 - Banlieue Proche : 2 500 FCFA</option>
+          <option value="Grande Banlieue" data-fee="3500">Zone 3 - Grande Banlieue : 3 500 FCFA</option>
+          <option value="Rufisque / Diamniadio" data-fee="devis">Zone 4 - Rufisque/Diamniadio : Sur devis</option>
+        </select>
+
+        <textarea id="customerAddress" placeholder="Adresse précise : villa n°, à côté de..." required></textarea>
+
+        <select id="paymentOption" required>
+          <option value="">Option de paiement</option>
+          <option value="Paiement intégral 100% Wave/OM">Paiement intégral 100% Wave/OM</option>
+          <option value="Acompte 50% - reste à la livraison">Acompte 50% - reste à la livraison</option>
+        </select>
+      </form>
+
+      <p id="freshNotice" class="fresh-notice hidden">
+        Achat le matin pour fraîcheur garantie : livraison demain J+1.
+      </p>
+
       <div class="cart-summary">
-        <strong>Total :</strong>
-        <span id="modalTotal">0 FCFA</span>
+        <span>Total articles :</span>
+        <strong id="articlesTotal">0 FCFA</strong>
+      </div>
+
+      <div class="cart-summary">
+        <span>Livraison :</span>
+        <strong id="deliveryFee">0 FCFA</strong>
+      </div>
+
+      <div class="cart-summary total">
+        <span>Total à payer :</span>
+        <strong id="modalTotal">0 FCFA</strong>
+      </div>
+
+      <div class="payment-box">
+        <p><strong>Coordonnées Wave/OM boutique :</strong></p>
+        <p>Wave : +221 77 000 00 00</p>
+        <p>Orange Money : +221 78 000 00 00</p>
       </div>
 
       <p class="payment-note">
         Validation immédiate après paiement Wave/OM pour garantir la fraîcheur de vos produits.
       </p>
 
-      <button id="whatsappButton" class="whatsapp-btn">
-        Commander sur WhatsApp
+      <button id="confirmButton" class="whatsapp-btn">
+        Confirmer sur WhatsApp
       </button>
 
       <button id="clearCartButton" class="clear-btn">
         Vider le panier
+      </button>
+    </div>
+  </div>
+
+  <div id="thankYouModal" class="modal hidden">
+    <div class="thankyou-content">
+      <h2>Merci de votre confiance ! ✨</h2>
+      <p>Votre panier est prêt. En cliquant sur le bouton ci-dessous, vous allez nous transmettre votre commande sur WhatsApp.</p>
+
+      <ul>
+        <li><strong>Vérification :</strong> nous confirmons la disponibilité de vos produits.</li>
+        <li><strong>Paiement :</strong> envoi des coordonnées Wave/OM pour validation.</li>
+        <li><strong>Logistique :</strong> prise de contact pour fixer l’heure exacte de livraison.</li>
+      </ul>
+
+      <button id="continueWhatsappButton" class="whatsapp-btn">
+        Continuer vers WhatsApp
+      </button>
+
+      <button id="closeThankYouModal" class="clear-btn">
+        Annuler
       </button>
     </div>
   </div>
