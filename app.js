@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "221770000000";
+const WHATSAPP_NUMBER = "33758243146";
 
 let products = [];
 let cart = JSON.parse(localStorage.getItem("nugelmaCart")) || [];
@@ -6,6 +6,7 @@ let cart = JSON.parse(localStorage.getItem("nugelmaCart")) || [];
 const productsGrid = document.getElementById("productsGrid");
 const cartButton = document.getElementById("cartButton");
 const cartTotal = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
 const cartModal = document.getElementById("cartModal");
 const closeModal = document.getElementById("closeModal");
 const cartItems = document.getElementById("cartItems");
@@ -18,6 +19,7 @@ async function loadProducts() {
   try {
     const response = await fetch("products.json");
     products = await response.json();
+
     displayProducts(products);
     updateCart();
   } catch (error) {
@@ -40,7 +42,7 @@ function displayProducts(list) {
         <p class="product-description">${product.description}</p>
         <div class="product-bottom">
           <span class="product-price">${formatPrice(product.price)} FCFA</span>
-          <button class="add-btn" data-id="${product.id}">Ajouter</button>
+          <button class="add-btn" data-id="${product.id}">Ajouter au panier</button>
         </div>
       </div>
     `;
@@ -57,6 +59,9 @@ function displayProducts(list) {
 
 function addToCart(id) {
   const product = products.find(item => item.id === id);
+
+  if (!product) return;
+
   const existingProduct = cart.find(item => item.id === id);
 
   if (existingProduct) {
@@ -106,8 +111,13 @@ function getTotal() {
   return cart.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 
+function getCartCount() {
+  return cart.reduce((total, item) => total + item.quantity, 0);
+}
+
 function updateCart() {
   cartTotal.textContent = `${formatPrice(getTotal())} FCFA`;
+  cartCount.textContent = getCartCount();
 }
 
 function renderCartModal() {
