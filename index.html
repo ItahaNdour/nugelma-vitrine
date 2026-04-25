@@ -13,17 +13,25 @@
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="logo">Nugelma</div>
-    <p class="tagline">Pâtisserie • Décoration • Marché frais</p>
+  <header class="hero">
+    <div class="hero-overlay">
+      <nav class="navbar">
+        <div class="logo">Nugelma</div>
+        <div class="nav-subtitle">Catalogue Premium</div>
+      </nav>
+
+      <div class="hero-content">
+        <p class="hero-label">Pâtisserie • Décoration • Marché frais</p>
+        <h1>L’excellence Nugelma, livrée avec soin.</h1>
+        <p>
+          Découvrez notre sélection premium et finalisez votre commande simplement sur WhatsApp.
+        </p>
+        <a href="#catalogue" class="hero-btn">Voir le catalogue</a>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <h1>Des produits frais, élégants et préparés avec soin</h1>
-      <p>Commandez depuis notre catalogue, puis finalisez votre achat sur WhatsApp après confirmation du paiement Wave/OM.</p>
-    </section>
-
+  <main id="catalogue">
     <section class="filters">
       <button class="filter-btn active" data-category="all">Tout</button>
       <button class="filter-btn" data-category="Pâtisserie">Pâtisserie</button>
@@ -35,7 +43,9 @@
   </main>
 
   <button id="cartButton" class="cart-button">
-    🛒 <span id="cartTotal">0 FCFA</span>
+    <span class="cart-icon">🛒</span>
+    <span id="cartCount" class="cart-count">0</span>
+    <span id="cartTotal">0 FCFA</span>
   </button>
 
   <div id="cartModal" class="modal hidden">
@@ -52,11 +62,11 @@
       </div>
 
       <p class="payment-note">
-        Pour garantir la fraîcheur de nos produits, votre commande est validée dès réception de votre paiement Wave/OM.
+        Validation immédiate après paiement Wave/OM pour garantir la fraîcheur de vos produits.
       </p>
 
       <button id="whatsappButton" class="whatsapp-btn">
-        Finaliser ma commande sur WhatsApp
+        Commander sur WhatsApp
       </button>
 
       <button id="clearCartButton" class="clear-btn">
