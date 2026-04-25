@@ -68,6 +68,7 @@ const confirmButton = document.getElementById("confirmButton");
 const clearCartButton = document.getElementById("clearCartButton");
 const filterButtons = document.querySelectorAll(".filter-btn");
 const deliveryZone = document.getElementById("deliveryZone");
+const deliveryDate = document.getElementById("deliveryDate");
 const freshNotice = document.getElementById("freshNotice");
 const thankYouModal = document.getElementById("thankYouModal");
 const continueWhatsappButton = document.getElementById("continueWhatsappButton");
@@ -115,6 +116,7 @@ function addToCart(id) {
 
   saveCart();
   updateCart();
+  applyFreshRule();
 }
 
 function removeFromCart(id) {
@@ -122,6 +124,7 @@ function removeFromCart(id) {
   saveCart();
   updateCart();
   renderCartModal();
+  applyFreshRule();
 }
 
 function changeQuantity(id, action) {
@@ -139,6 +142,7 @@ function changeQuantity(id, action) {
   saveCart();
   updateCart();
   renderCartModal();
+  applyFreshRule();
 }
 
 function getArticlesTotal() {
@@ -147,6 +151,41 @@ function getArticlesTotal() {
 
 function getCartCount() {
   return cart.reduce((total, item) => total + item.quantity, 0);
+}
+
+function hasFreshMarketProduct() {
+  return cart.some(item => item.category === "Marché frais");
+}
+
+function getTodayDateString() {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+}
+
+function getTomorrowDateString() {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow.toISOString().split("T")[0];
+}
+
+function applyFreshRule() {
+  if (hasFreshMarketProduct()) {
+    deliveryDate.min = getTomorrowDateString();
+
+    if (!deliveryDate.value || deliveryDate.value < getTomorrowDateString()) {
+      deliveryDate.value = getTomorrowDateString();
+    }
+
+    freshNotice.classList.remove("hidden");
+  } else {
+    deliveryDate.min = getTodayDateString();
+
+    if (!deliveryDate.value) {
+      deliveryDate.value = getTodayDateString();
+    }
+
+    freshNotice.classList.add("hidden");
+  }
 }
 
 function getDeliveryInfo() {
@@ -178,14 +217,6 @@ function getDeliveryInfo() {
     label: `${formatPrice(fee)} FCFA`,
     isQuote: false
   };
-}
-
-function hasFreshMarketProduct() {
-  return cart.some(item => item.category === "Marché frais");
-}
-
-function getDeliveryDelay() {
-  return hasFreshMarketProduct() ? "Demain J+1" : "Aujourd'hui selon disponibilité";
 }
 
 function updateCart() {
@@ -227,13 +258,11 @@ function renderCartModal() {
 
   articlesTotal.textContent = `${formatPrice(totalArticles)} FCFA`;
   deliveryFee.textContent = delivery.label;
-  modalTotal.textContent = delivery.isQuote ? `${formatPrice(totalArticles)} FCFA + livraison sur devis` : `${formatPrice(totalGeneral)} FCFA`;
+  modalTotal.textContent = delivery.isQuote
+    ? `${formatPrice(totalArticles)} FCFA + livraison sur devis`
+    : `${formatPrice(totalGeneral)} FCFA`;
 
-  if (hasFreshMarketProduct()) {
-    freshNotice.classList.remove("hidden");
-  } else {
-    freshNotice.classList.add("hidden");
-  }
+  applyFreshRule();
 }
 
 function validateForm() {
@@ -252,16 +281,24 @@ function validateForm() {
   return true;
 }
 
+function getSelectedPaymentOption() {
+  const selectedPayment = document.querySelector('input[name="paymentOption"]:checked');
+  return selectedPayment ? selectedPayment.value : "";
+}
+
 function prepareWhatsAppMessage() {
   const name = document.getElementById("customerName").value.trim();
   const whatsapp = document.getElementById("customerWhatsapp").value.trim();
   const address = document.getElementById("customerAddress").value.trim();
-  const payment = document.getElementById("paymentOption").value;
+  const payment = getSelectedPaymentOption();
   const delivery = getDeliveryInfo();
 
   const totalArticles = getArticlesTotal();
   const totalGeneral = delivery.isQuote ? totalArticles : totalArticles + delivery.fee;
   const deliveryText = delivery.isQuote ? "Sur devis" : `${formatPrice(delivery.fee)} FCFA`;
+  const totalGeneralText = delivery.isQuote
+    ? `${formatPrice(totalGeneral)} FCFA + livraison sur devis`
+    : `${formatPrice(totalGeneral)} FCFA`;
 
   let productsText = "";
 
@@ -269,19 +306,19 @@ function prepareWhatsAppMessage() {
     productsText += `${item.quantity} x ${item.name} - ${formatPrice(item.price * item.quantity)} FCFA\n`;
   });
 
-  let message = `Bonjour Nugelma ! Commande passée par : ${name}\n`;
+  let message = `Bonjour Nugelma ! Nouvelle commande de : ${name}\n`;
   message += "---\n";
   message += `PRODUITS :\n${productsText}`;
   message += `TOTAL ARTICLES : ${formatPrice(totalArticles)} FCFA\n`;
   message += `LIVRAISON : ${delivery.zone} (${deliveryText})\n`;
-  message += `TOTAL À PAYER : ${delivery.isQuote ? formatPrice(totalGeneral) + " FCFA + livraison sur devis" : formatPrice(totalGeneral) + " FCFA"}\n`;
+  message += `TOTAL GÉNÉRAL : ${totalGeneralText}\n`;
   message += "---\n";
   message += `WHATSAPP : ${whatsapp}\n`;
+  message += `DATE DE LIVRAISON : ${deliveryDate.value}\n`;
   message += `ADRESSE : ${address}\n`;
   message += `PAIEMENT : ${payment}\n`;
-  message += `DÉLAI : ${getDeliveryDelay()}\n`;
   message += "---\n";
-  message += "J'attends vos instructions pour le dépôt Wave/OM.";
+  message += "👉 Je procède au paiement sur vos numéros indiqués et je vous envoie la capture d'écran ici pour valider ma commande.";
 
   finalWhatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
@@ -348,6 +385,7 @@ cartModal.addEventListener("click", event => {
 });
 
 deliveryZone.addEventListener("change", renderCartModal);
+deliveryDate.addEventListener("change", applyFreshRule);
 confirmButton.addEventListener("click", openThankYouPopup);
 continueWhatsappButton.addEventListener("click", continueToWhatsApp);
 
@@ -359,3 +397,4 @@ clearCartButton.addEventListener("click", clearCart);
 
 displayProducts(products);
 updateCart();
+applyFreshRule();
