@@ -1,6 +1,56 @@
-const WHATSAPP_NUMBER = "33758243146";
+const WHATSAPP_NUMBER = "221770000000";
 
-let products = [];
+const products = [
+  {
+    id: 1,
+    name: "Gâteau chocolat",
+    price: 15000,
+    category: "Pâtisserie",
+    description: "Gâteau premium, fondant et élégant.",
+    image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=70"
+  },
+  {
+    id: 2,
+    name: "Mini douceurs",
+    price: 12000,
+    category: "Pâtisserie",
+    description: "Box raffinée pour vos événements.",
+    image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=70"
+  },
+  {
+    id: 3,
+    name: "Décoration chic",
+    price: 18000,
+    category: "Décoration",
+    description: "Ambiance élégante et soignée.",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=70"
+  },
+  {
+    id: 4,
+    name: "Ballons premium",
+    price: 8000,
+    category: "Décoration",
+    description: "Décor doux, festif et moderne.",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=600&q=70"
+  },
+  {
+    id: 5,
+    name: "Fruits frais",
+    price: 10000,
+    category: "Marché frais",
+    description: "Sélection fraîche et de qualité.",
+    image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=600&q=70"
+  },
+  {
+    id: 6,
+    name: "Pack familial",
+    price: 25000,
+    category: "Marché frais",
+    description: "Assortiment pratique du quotidien.",
+    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=70"
+  }
+];
+
 let cart = JSON.parse(localStorage.getItem("nugelmaCart")) || [];
 
 const productsGrid = document.getElementById("productsGrid");
@@ -15,18 +65,6 @@ const whatsappButton = document.getElementById("whatsappButton");
 const clearCartButton = document.getElementById("clearCartButton");
 const filterButtons = document.querySelectorAll(".filter-btn");
 
-async function loadProducts() {
-  try {
-    const response = await fetch("products.json");
-    products = await response.json();
-
-    displayProducts(products);
-    updateCart();
-  } catch (error) {
-    productsGrid.innerHTML = "<p>Impossible de charger les produits.</p>";
-  }
-}
-
 function displayProducts(list) {
   productsGrid.innerHTML = "";
 
@@ -35,15 +73,13 @@ function displayProducts(list) {
     card.className = "product-card";
 
     card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
+      <img src="${product.image}" alt="${product.name}" loading="lazy">
       <div class="product-info">
         <p class="product-category">${product.category}</p>
         <h2 class="product-title">${product.name}</h2>
         <p class="product-description">${product.description}</p>
-        <div class="product-bottom">
-          <span class="product-price">${formatPrice(product.price)} FCFA</span>
-          <button class="add-btn" data-id="${product.id}">Ajouter au panier</button>
-        </div>
+        <span class="product-price">${formatPrice(product.price)} FCFA</span>
+        <button class="add-btn" data-id="${product.id}">Ajouter</button>
       </div>
     `;
 
@@ -59,7 +95,6 @@ function displayProducts(list) {
 
 function addToCart(id) {
   const product = products.find(item => item.id === id);
-
   if (!product) return;
 
   const existingProduct = cart.find(item => item.id === id);
@@ -67,10 +102,7 @@ function addToCart(id) {
   if (existingProduct) {
     existingProduct.quantity += 1;
   } else {
-    cart.push({
-      ...product,
-      quantity: 1
-    });
+    cart.push({ ...product, quantity: 1 });
   }
 
   saveCart();
@@ -86,16 +118,10 @@ function removeFromCart(id) {
 
 function changeQuantity(id, action) {
   const item = cart.find(product => product.id === id);
-
   if (!item) return;
 
-  if (action === "increase") {
-    item.quantity += 1;
-  }
-
-  if (action === "decrease") {
-    item.quantity -= 1;
-  }
+  if (action === "increase") item.quantity += 1;
+  if (action === "decrease") item.quantity -= 1;
 
   if (item.quantity <= 0) {
     removeFromCart(id);
@@ -171,10 +197,7 @@ function generateWhatsAppMessage() {
   message += "---\n";
   message += "Je souhaite recevoir les instructions de paiement pour valider l'achat de mes produits.";
 
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-
-  window.open(whatsappUrl, "_blank");
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
 }
 
 function saveCart() {
@@ -202,8 +225,7 @@ filterButtons.forEach(button => {
     if (category === "all") {
       displayProducts(products);
     } else {
-      const filteredProducts = products.filter(product => product.category === category);
-      displayProducts(filteredProducts);
+      displayProducts(products.filter(product => product.category === category));
     }
   });
 });
@@ -226,4 +248,5 @@ cartModal.addEventListener("click", event => {
 whatsappButton.addEventListener("click", generateWhatsAppMessage);
 clearCartButton.addEventListener("click", clearCart);
 
-loadProducts();
+displayProducts(products);
+updateCart();
