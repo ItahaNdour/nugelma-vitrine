@@ -1,39 +1,178 @@
-<div id="thankYouModal" class="modal hidden">
-  <div class="thankyou-content payment-priority">
-    <h2>Paiement de validation</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nugelma | Catalogue Premium</title>
 
-    <p class="payment-intro">
-      Votre commande est prête. Pour la valider, effectuez votre paiement Wave/OM, puis envoyez la preuve sur WhatsApp.
-    </p>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
-    <div class="payment-numbers big">
-      <div class="payment-line">
-        <div>
-          <span>Wave</span>
-          <strong id="waveNumber">+221 77 000 00 00</strong>
-        </div>
-        <button class="copy-btn" data-copy="+221770000000">📋 Copier</button>
-      </div>
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-      <div class="payment-line">
-        <div>
-          <span>Orange Money</span>
-          <strong id="omNumber">+221 78 000 00 00</strong>
-        </div>
-        <button class="copy-btn" data-copy="+221780000000">📋 Copier</button>
-      </div>
+<body>
+  <header class="top-header">
+    <div class="logo">NUGELMA</div>
+
+    <button id="cartButton" class="cart-button">
+      🛒 <span id="cartCount">0</span>
+      <strong id="cartTotal">0 FCFA</strong>
+    </button>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-label">Pâtisserie • Décoration • Marché frais</p>
+      <h1>L’excellence Nugelma, livrée avec soin.</h1>
+      <p class="hero-text">Sélectionnez vos produits premium et finalisez votre commande sur WhatsApp.</p>
     </div>
+  </section>
 
-    <p class="payment-reminder">
-      Après paiement, cliquez ci-dessous pour envoyer votre commande et votre capture d’écran sur WhatsApp.
-    </p>
+  <section class="process">
+    <div>✨<span>Sélection</span></div>
+    <div>💳<span>Paiement Wave/OM</span></div>
+    <div>🛒<span>Achat fraîcheur</span></div>
+    <div>🚚<span>Livraison</span></div>
+  </section>
 
-    <button id="continueWhatsappButton" class="whatsapp-btn">
-      J’ai payé, j’envoie ma preuve sur WhatsApp
-    </button>
+  <main>
+    <section class="filters">
+      <button class="filter-btn active" data-category="all">Tout</button>
+      <button class="filter-btn" data-category="Pâtisserie">Pâtisserie</button>
+      <button class="filter-btn" data-category="Décoration">Décoration</button>
+      <button class="filter-btn" data-category="Marché frais">Marché frais</button>
+    </section>
 
-    <button id="closeThankYouModal" class="clear-btn">
-      Annuler
-    </button>
+    <section id="productsGrid" class="products-grid"></section>
+  </main>
+
+  <div id="cartModal" class="modal hidden">
+    <div class="modal-content">
+      <button id="closeModal" class="close-btn">×</button>
+
+      <h2>Votre commande</h2>
+
+      <div id="cartItems"></div>
+
+      <form id="orderForm" class="order-form">
+        <label>
+          Nom complet
+          <input id="customerName" type="text" required />
+        </label>
+
+        <label>
+          Numéro WhatsApp
+          <input id="customerWhatsapp" type="tel" required />
+          <small>Pour l’envoi de la localisation et le suivi.</small>
+        </label>
+
+        <label>
+          Date de livraison
+          <input id="deliveryDate" type="date" required />
+        </label>
+
+        <label>
+          Quartier & tarif de livraison
+          <select id="deliveryZone" required>
+            <option value="">Sélectionnez votre zone</option>
+            <option value="Zone 1 - Dakar Centre" data-fee="2000">Zone 1 - Dakar Centre : 2 000 FCFA</option>
+            <option value="Zone 2 - Banlieue Proche" data-fee="2500">Zone 2 - Banlieue Proche : 2 500 FCFA</option>
+            <option value="Zone 3 - Grande Banlieue" data-fee="3500">Zone 3 - Grande Banlieue : 3 500 FCFA</option>
+            <option value="Zone 4 - Rufisque/Diamniadio" data-fee="devis">Zone 4 - Rufisque/Diamniadio : Sur devis</option>
+          </select>
+        </label>
+
+        <label>
+          Adresse précise
+          <textarea id="customerAddress" placeholder="Villa, étage, repères..." required></textarea>
+        </label>
+
+        <div class="payment-choice">
+          <p>Option de paiement</p>
+
+          <label>
+            <input type="radio" name="paymentOption" value="Paiement intégral 100%" required />
+            Paiement intégral 100%
+          </label>
+
+          <label>
+            <input type="radio" name="paymentOption" value="Acompte 50% obligatoire" required />
+            Acompte de 50% obligatoire
+          </label>
+        </div>
+      </form>
+
+      <p id="freshNotice" class="fresh-notice hidden">
+        Marché frais détecté : pour garantir la fraîcheur, la livraison est possible à partir de demain J+1.
+      </p>
+
+      <div class="cart-summary">
+        <span>Total articles :</span>
+        <strong id="articlesTotal">0 FCFA</strong>
+      </div>
+
+      <div class="cart-summary">
+        <span>Livraison :</span>
+        <strong id="deliveryFee">0 FCFA</strong>
+      </div>
+
+      <div class="cart-summary total">
+        <span>Total général :</span>
+        <strong id="modalTotal">0 FCFA</strong>
+      </div>
+
+      <button id="confirmButton" class="whatsapp-btn">
+        Confirmer ma commande
+      </button>
+
+      <button id="clearCartButton" class="clear-btn">
+        Vider le panier
+      </button>
+    </div>
   </div>
-</div>
+
+  <div id="thankYouModal" class="modal hidden">
+    <div class="thankyou-content payment-priority">
+      <h2>Paiement de validation</h2>
+
+      <p class="payment-intro">
+        Votre commande est prête. Pour la valider, effectuez votre paiement Wave/OM, puis envoyez la preuve sur WhatsApp.
+      </p>
+
+      <div class="payment-numbers big">
+        <div class="payment-line">
+          <div>
+            <span>Wave</span>
+            <strong>+221 77 000 00 00</strong>
+          </div>
+          <button class="copy-btn" data-copy="+221770000000">📋 Copier</button>
+        </div>
+
+        <div class="payment-line">
+          <div>
+            <span>Orange Money</span>
+            <strong>+221 78 000 00 00</strong>
+          </div>
+          <button class="copy-btn" data-copy="+221780000000">📋 Copier</button>
+        </div>
+      </div>
+
+      <p class="payment-reminder">
+        Après paiement, cliquez ci-dessous pour envoyer votre commande et votre capture d’écran sur WhatsApp.
+      </p>
+
+      <button id="continueWhatsappButton" class="whatsapp-btn">
+        J’ai payé, j’envoie ma preuve sur WhatsApp
+      </button>
+
+      <button id="closeThankYouModal" class="clear-btn">
+        Annuler
+      </button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
