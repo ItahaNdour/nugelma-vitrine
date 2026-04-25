@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "33758243146";
+const WHATSAPP_NUMBER = "221770000000";
 
 const products = [
   {
@@ -52,6 +52,7 @@ const products = [
 ];
 
 let cart = JSON.parse(localStorage.getItem("nugelmaCart")) || [];
+let finalWhatsappUrl = "";
 
 const productsGrid = document.getElementById("productsGrid");
 const cartButton = document.getElementById("cartButton");
@@ -60,10 +61,17 @@ const cartCount = document.getElementById("cartCount");
 const cartModal = document.getElementById("cartModal");
 const closeModal = document.getElementById("closeModal");
 const cartItems = document.getElementById("cartItems");
+const articlesTotal = document.getElementById("articlesTotal");
+const deliveryFee = document.getElementById("deliveryFee");
 const modalTotal = document.getElementById("modalTotal");
-const whatsappButton = document.getElementById("whatsappButton");
+const confirmButton = document.getElementById("confirmButton");
 const clearCartButton = document.getElementById("clearCartButton");
 const filterButtons = document.querySelectorAll(".filter-btn");
+const deliveryZone = document.getElementById("deliveryZone");
+const freshNotice = document.getElementById("freshNotice");
+const thankYouModal = document.getElementById("thankYouModal");
+const continueWhatsappButton = document.getElementById("continueWhatsappButton");
+const closeThankYouModal = document.getElementById("closeThankYouModal");
 
 function displayProducts(list) {
   productsGrid.innerHTML = "";
@@ -133,7 +141,7 @@ function changeQuantity(id, action) {
   renderCartModal();
 }
 
-function getTotal() {
+function getArticlesTotal() {
   return cart.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 
@@ -141,8 +149,47 @@ function getCartCount() {
   return cart.reduce((total, item) => total + item.quantity, 0);
 }
 
+function getDeliveryInfo() {
+  const selectedOption = deliveryZone.options[deliveryZone.selectedIndex];
+
+  if (!selectedOption || !selectedOption.dataset.fee) {
+    return {
+      zone: "",
+      fee: 0,
+      label: "0 FCFA",
+      isQuote: false
+    };
+  }
+
+  if (selectedOption.dataset.fee === "devis") {
+    return {
+      zone: selectedOption.value,
+      fee: 0,
+      label: "Sur devis",
+      isQuote: true
+    };
+  }
+
+  const fee = Number(selectedOption.dataset.fee);
+
+  return {
+    zone: selectedOption.value,
+    fee,
+    label: `${formatPrice(fee)} FCFA`,
+    isQuote: false
+  };
+}
+
+function hasFreshMarketProduct() {
+  return cart.some(item => item.category === "Marché frais");
+}
+
+function getDeliveryDelay() {
+  return hasFreshMarketProduct() ? "Demain J+1" : "Aujourd'hui selon disponibilité";
+}
+
 function updateCart() {
-  cartTotal.textContent = `${formatPrice(getTotal())} FCFA`;
+  cartTotal.textContent = `${formatPrice(getArticlesTotal())} FCFA`;
   cartCount.textContent = getCartCount();
 }
 
@@ -151,53 +198,108 @@ function renderCartModal() {
 
   if (cart.length === 0) {
     cartItems.innerHTML = "<p>Votre panier est vide.</p>";
-    modalTotal.textContent = "0 FCFA";
-    return;
+  } else {
+    cart.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+
+      div.innerHTML = `
+        <div>
+          <p class="cart-item-name">${item.name}</p>
+          <p class="cart-item-details">${formatPrice(item.price)} FCFA × ${item.quantity}</p>
+        </div>
+
+        <div class="quantity-controls">
+          <button onclick="changeQuantity(${item.id}, 'decrease')">−</button>
+          <span>${item.quantity}</span>
+          <button onclick="changeQuantity(${item.id}, 'increase')">+</button>
+          <button onclick="removeFromCart(${item.id})">×</button>
+        </div>
+      `;
+
+      cartItems.appendChild(div);
+    });
   }
 
-  cart.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "cart-item";
+  const delivery = getDeliveryInfo();
+  const totalArticles = getArticlesTotal();
+  const totalGeneral = delivery.isQuote ? totalArticles : totalArticles + delivery.fee;
 
-    div.innerHTML = `
-      <div>
-        <p class="cart-item-name">${item.name}</p>
-        <p class="cart-item-details">${formatPrice(item.price)} FCFA × ${item.quantity}</p>
-      </div>
+  articlesTotal.textContent = `${formatPrice(totalArticles)} FCFA`;
+  deliveryFee.textContent = delivery.label;
+  modalTotal.textContent = delivery.isQuote ? `${formatPrice(totalArticles)} FCFA + livraison sur devis` : `${formatPrice(totalGeneral)} FCFA`;
 
-      <div class="quantity-controls">
-        <button onclick="changeQuantity(${item.id}, 'decrease')">−</button>
-        <span>${item.quantity}</span>
-        <button onclick="changeQuantity(${item.id}, 'increase')">+</button>
-        <button onclick="removeFromCart(${item.id})">×</button>
-      </div>
-    `;
-
-    cartItems.appendChild(div);
-  });
-
-  modalTotal.textContent = `${formatPrice(getTotal())} FCFA`;
+  if (hasFreshMarketProduct()) {
+    freshNotice.classList.remove("hidden");
+  } else {
+    freshNotice.classList.add("hidden");
+  }
 }
 
-function generateWhatsAppMessage() {
+function validateForm() {
+  const form = document.getElementById("orderForm");
+
   if (cart.length === 0) {
     alert("Votre panier est vide.");
-    return;
+    return false;
   }
 
-  let message = "Bonjour Nugelma, je souhaite passer commande :\n";
-  message += "---\n";
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return false;
+  }
+
+  return true;
+}
+
+function prepareWhatsAppMessage() {
+  const name = document.getElementById("customerName").value.trim();
+  const whatsapp = document.getElementById("customerWhatsapp").value.trim();
+  const address = document.getElementById("customerAddress").value.trim();
+  const payment = document.getElementById("paymentOption").value;
+  const delivery = getDeliveryInfo();
+
+  const totalArticles = getArticlesTotal();
+  const totalGeneral = delivery.isQuote ? totalArticles : totalArticles + delivery.fee;
+  const deliveryText = delivery.isQuote ? "Sur devis" : `${formatPrice(delivery.fee)} FCFA`;
+
+  let productsText = "";
 
   cart.forEach(item => {
-    message += `${item.quantity} x ${item.name} - ${formatPrice(item.price * item.quantity)} FCFA\n`;
+    productsText += `${item.quantity} x ${item.name} - ${formatPrice(item.price * item.quantity)} FCFA\n`;
   });
 
+  let message = `Bonjour Nugelma ! Commande passée par : ${name}\n`;
   message += "---\n";
-  message += `TOTAL : ${formatPrice(getTotal())} FCFA\n`;
+  message += `PRODUITS :\n${productsText}`;
+  message += `TOTAL ARTICLES : ${formatPrice(totalArticles)} FCFA\n`;
+  message += `LIVRAISON : ${delivery.zone} (${deliveryText})\n`;
+  message += `TOTAL À PAYER : ${delivery.isQuote ? formatPrice(totalGeneral) + " FCFA + livraison sur devis" : formatPrice(totalGeneral) + " FCFA"}\n`;
   message += "---\n";
-  message += "Je souhaite recevoir les instructions de paiement pour valider l'achat de mes produits.";
+  message += `WHATSAPP : ${whatsapp}\n`;
+  message += `ADRESSE : ${address}\n`;
+  message += `PAIEMENT : ${payment}\n`;
+  message += `DÉLAI : ${getDeliveryDelay()}\n`;
+  message += "---\n";
+  message += "J'attends vos instructions pour le dépôt Wave/OM.";
 
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+  finalWhatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function openThankYouPopup() {
+  if (!validateForm()) return;
+
+  prepareWhatsAppMessage();
+
+  cartModal.classList.add("hidden");
+  thankYouModal.classList.remove("hidden");
+}
+
+function continueToWhatsApp() {
+  if (!finalWhatsappUrl) return;
+
+  window.open(finalWhatsappUrl, "_blank");
+  thankYouModal.classList.add("hidden");
 }
 
 function saveCart() {
@@ -245,7 +347,14 @@ cartModal.addEventListener("click", event => {
   }
 });
 
-whatsappButton.addEventListener("click", generateWhatsAppMessage);
+deliveryZone.addEventListener("change", renderCartModal);
+confirmButton.addEventListener("click", openThankYouPopup);
+continueWhatsappButton.addEventListener("click", continueToWhatsApp);
+
+closeThankYouModal.addEventListener("click", () => {
+  thankYouModal.classList.add("hidden");
+});
+
 clearCartButton.addEventListener("click", clearCart);
 
 displayProducts(products);
