@@ -7,31 +7,29 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <header class="hero">
-    <div class="hero-overlay">
-      <nav class="navbar">
-        <div class="logo">Nugelma</div>
-        <div class="nav-subtitle">Catalogue Premium</div>
-      </nav>
-
-      <div class="hero-content">
-        <p class="hero-label">Pâtisserie • Décoration • Marché frais</p>
-        <h1>L’excellence Nugelma, livrée avec soin.</h1>
-        <p>
-          Découvrez notre sélection premium et finalisez votre commande simplement sur WhatsApp.
-        </p>
-        <a href="#catalogue" class="hero-btn">Voir le catalogue</a>
-      </div>
-    </div>
+  <header class="top-header">
+    <div class="logo">NUGELMA</div>
+    <button id="cartButton" class="cart-button">
+      🛒 <span id="cartCount">0</span>
+      <strong id="cartTotal">0 FCFA</strong>
+    </button>
   </header>
 
-  <main id="catalogue">
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-label">Pâtisserie • Décoration • Marché frais</p>
+      <h1>L’excellence Nugelma, livrée avec soin.</h1>
+      <p class="hero-text">Commandez vos produits premium et validez votre achat sur WhatsApp.</p>
+    </div>
+  </section>
+
+  <main>
     <section class="filters">
       <button class="filter-btn active" data-category="all">Tout</button>
       <button class="filter-btn" data-category="Pâtisserie">Pâtisserie</button>
@@ -42,19 +40,13 @@
     <section id="productsGrid" class="products-grid"></section>
   </main>
 
-  <button id="cartButton" class="cart-button">
-    <span class="cart-icon">🛒</span>
-    <span id="cartCount" class="cart-count">0</span>
-    <span id="cartTotal">0 FCFA</span>
-  </button>
-
   <div id="cartModal" class="modal hidden">
     <div class="modal-content">
       <button id="closeModal" class="close-btn">×</button>
 
       <h2>Votre commande</h2>
 
-      <div id="cartItems" class="cart-items"></div>
+      <div id="cartItems"></div>
 
       <div class="cart-summary">
         <strong>Total :</strong>
