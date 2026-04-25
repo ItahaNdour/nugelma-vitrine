@@ -68,11 +68,11 @@ body {
 }
 
 .hero {
-  height: 38vh;
-  min-height: 255px;
-  max-height: 350px;
+  height: 42vh;
+  max-height: 60vh;
+  min-height: 245px;
   background:
-    linear-gradient(rgba(0,0,0,0.64), rgba(0,0,0,0.56)),
+    linear-gradient(rgba(0,0,0,0.66), rgba(0,0,0,0.55)),
     url("https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=65");
   background-size: cover;
   background-position: center;
@@ -302,8 +302,14 @@ body {
 
 .order-form {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   margin: 16px 0;
+}
+
+.order-form label,
+.payment-choice p {
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .order-form input,
@@ -315,6 +321,7 @@ body {
   padding: 13px;
   font-family: inherit;
   font-size: 13px;
+  margin-top: 6px;
 }
 
 .order-form textarea {
@@ -325,7 +332,25 @@ body {
 .order-form small {
   color: var(--gray);
   font-size: 11px;
-  margin-top: -5px;
+  display: block;
+  margin-top: 5px;
+}
+
+.payment-choice {
+  background: #f8f8f8;
+  padding: 13px;
+  border-radius: 16px;
+}
+
+.payment-choice label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+.payment-choice input {
+  width: auto;
+  margin-right: 6px;
 }
 
 .cart-summary {
@@ -342,8 +367,7 @@ body {
 }
 
 .fresh-notice,
-.payment-note,
-.payment-box {
+.payment-numbers {
   background: var(--light-gold);
   border-left: 4px solid var(--gold);
   padding: 13px;
@@ -354,8 +378,9 @@ body {
   margin: 12px 0;
 }
 
-.payment-box p {
-  margin-bottom: 4px;
+.payment-numbers p {
+  margin-bottom: 6px;
+  font-size: 16px;
 }
 
 .whatsapp-btn,
@@ -384,12 +409,6 @@ body {
 .thankyou-content li {
   font-size: 14px;
   line-height: 1.6;
-  color: var(--black);
-}
-
-.thankyou-content ul {
-  margin: 16px 0;
-  padding-left: 18px;
 }
 
 @media (min-width: 768px) {
