@@ -23,6 +23,7 @@ const db = getFirestore(app);
 const WHATSAPP_NUMBER = "221770000000";
 
 let products = [];
+
 let categories = [];
 
 let cart = JSON.parse(localStorage.getItem("nugelmaCart")) || [];
@@ -86,8 +87,6 @@ async function loadProducts(){
 
     displayProducts(products);
 
-    console.log("Produits :",products);
-
   }catch(error){
 
     console.error(error);
@@ -129,11 +128,17 @@ function renderCategories(){
 
   const allButton = document.createElement("button");
 
-  allButton.className = "filter-btn active";
+  allButton.className = "category-card active";
 
   allButton.dataset.category = "all";
 
-  allButton.textContent = "Tout";
+  allButton.style.backgroundImage =
+  `url('https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=900&q=70')`;
+
+  allButton.innerHTML = `
+    <div class="category-overlay"></div>
+    <span>Tout</span>
+  `;
 
   filtersContainer.appendChild(allButton);
 
@@ -145,11 +150,17 @@ function renderCategories(){
 
       const button = document.createElement("button");
 
-      button.className = "filter-btn";
+      button.className = "category-card";
 
       button.dataset.category = category.nom;
 
-      button.textContent = category.nom;
+      button.style.backgroundImage =
+      `url('${category.image}')`;
+
+      button.innerHTML = `
+        <div class="category-overlay"></div>
+        <span>${category.nom}</span>
+      `;
 
       filtersContainer.appendChild(button);
 
@@ -161,7 +172,7 @@ function renderCategories(){
 
 function activateFilters(){
 
-  const filterButtons = document.querySelectorAll(".filter-btn");
+  const filterButtons = document.querySelectorAll(".category-card");
 
   filterButtons.forEach(button=>{
 
@@ -233,7 +244,10 @@ function displayProducts(list){
           ${formatPrice(product.prix || 0)} FCFA
         </span>
 
-        <button class="add-btn" data-id="${product.id}">
+        <button
+          class="add-btn"
+          data-id="${product.id}"
+        >
           Ajouter
         </button>
 
@@ -285,9 +299,11 @@ function addToCart(id){
 
 function updateCart(){
 
-  cartTotal.textContent = `${formatPrice(getArticlesTotal())} FCFA`;
+  cartTotal.textContent =
+  `${formatPrice(getArticlesTotal())} FCFA`;
 
-  cartCount.textContent = getCartCount();
+  cartCount.textContent =
+  getCartCount();
 
 }
 
@@ -313,7 +329,10 @@ function getCartCount(){
 
 function saveCart(){
 
-  localStorage.setItem("nugelmaCart",JSON.stringify(cart));
+  localStorage.setItem(
+    "nugelmaCart",
+    JSON.stringify(cart)
+  );
 
 }
 
@@ -340,9 +359,11 @@ function renderCartModal(){
 
   const total = getArticlesTotal();
 
-  articlesTotal.textContent = `${formatPrice(total)} FCFA`;
+  articlesTotal.textContent =
+  `${formatPrice(total)} FCFA`;
 
-  modalTotal.textContent = `${formatPrice(total)} FCFA`;
+  modalTotal.textContent =
+  `${formatPrice(total)} FCFA`;
 
 }
 
@@ -423,7 +444,9 @@ document.querySelectorAll(".copy-btn").forEach(button=>{
 
     try{
 
-      await navigator.clipboard.writeText(button.dataset.copy);
+      await navigator.clipboard.writeText(
+        button.dataset.copy
+      );
 
       button.textContent = "✅ Copié";
 
