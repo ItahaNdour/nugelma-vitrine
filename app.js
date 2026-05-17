@@ -17,34 +17,46 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 const WHATSAPP_NUMBER = "221770000000";
 
 let products = [];
+let categories = [];
+
 let cart = JSON.parse(localStorage.getItem("nugelmaCart")) || [];
+
 let finalWhatsappUrl = "";
 
 const productsGrid = document.getElementById("productsGrid");
+
+const filtersContainer = document.getElementById("filtersContainer");
+
 const cartButton = document.getElementById("cartButton");
+
 const cartTotal = document.getElementById("cartTotal");
+
 const cartCount = document.getElementById("cartCount");
 
 const cartModal = document.getElementById("cartModal");
+
 const closeModal = document.getElementById("closeModal");
 
 const cartItems = document.getElementById("cartItems");
 
 const articlesTotal = document.getElementById("articlesTotal");
+
 const deliveryFee = document.getElementById("deliveryFee");
+
 const modalTotal = document.getElementById("modalTotal");
 
 const confirmButton = document.getElementById("confirmButton");
+
 const clearCartButton = document.getElementById("clearCartButton");
 
-const filterButtons = document.querySelectorAll(".filter-btn");
-
 const deliveryZone = document.getElementById("deliveryZone");
+
 const deliveryDate = document.getElementById("deliveryDate");
 
 const freshNotice = document.getElementById("freshNotice");
@@ -74,13 +86,117 @@ async function loadProducts(){
 
     displayProducts(products);
 
-    console.log(products);
+    console.log("Produits :",products);
 
   }catch(error){
 
     console.error(error);
 
   }
+
+}
+
+async function loadCategories(){
+
+  try{
+
+    const querySnapshot = await getDocs(collection(db,"categories"));
+
+    categories = [];
+
+    querySnapshot.forEach((doc)=>{
+
+      categories.push({
+        id:doc.id,
+        ...doc.data()
+      });
+
+    });
+
+    renderCategories();
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+function renderCategories(){
+
+  filtersContainer.innerHTML = "";
+
+  const allButton = document.createElement("button");
+
+  allButton.className = "filter-btn active";
+
+  allButton.dataset.category = "all";
+
+  allButton.textContent = "Tout";
+
+  filtersContainer.appendChild(allButton);
+
+  categories
+    .sort((a,b)=>a.ordre - b.ordre)
+    .forEach(category=>{
+
+      if(category.actif !== true) return;
+
+      const button = document.createElement("button");
+
+      button.className = "filter-btn";
+
+      button.dataset.category = category.nom;
+
+      button.textContent = category.nom;
+
+      filtersContainer.appendChild(button);
+
+    });
+
+  activateFilters();
+
+}
+
+function activateFilters(){
+
+  const filterButtons = document.querySelectorAll(".filter-btn");
+
+  filterButtons.forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+      filterButtons.forEach(btn=>{
+
+        btn.classList.remove("active");
+
+      });
+
+      button.classList.add("active");
+
+      const category = button.dataset.category;
+
+      if(category === "all"){
+
+        displayProducts(products);
+
+      }else{
+
+        const filtered = products.filter(product=>{
+
+          return product.categorie === category
+            || product.categorieSite === category;
+
+        });
+
+        displayProducts(filtered);
+
+      }
+
+    });
+
+  });
 
 }
 
@@ -95,7 +211,9 @@ function displayProducts(list){
     card.className = "product-card";
 
     card.innerHTML = `
-      <img src="${product.imageUrl || 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=70'}">
+      <img
+        src="${product.imageUrl || 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=70'}"
+      >
 
       <div class="product-info">
 
@@ -108,7 +226,7 @@ function displayProducts(list){
         </h2>
 
         <p class="product-description">
-          Produit premium Nugelma
+          ${product.description || "Produit premium Nugelma"}
         </p>
 
         <span class="product-price">
@@ -274,7 +392,8 @@ ${productsText}
 TOTAL : ${formatPrice(getArticlesTotal())} FCFA
 `;
 
-  finalWhatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  finalWhatsappUrl =
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
   window.open(finalWhatsappUrl,"_blank");
 
@@ -324,40 +443,8 @@ document.querySelectorAll(".copy-btn").forEach(button=>{
 
 });
 
-filterButtons.forEach(button=>{
-
-  button.addEventListener("click",()=>{
-
-    filterButtons.forEach(btn=>{
-
-      btn.classList.remove("active");
-
-    });
-
-    button.classList.add("active");
-
-    const category = button.dataset.category;
-
-    if(category === "all"){
-
-      displayProducts(products);
-
-    }else{
-
-      const filtered = products.filter(product=>{
-
-        return product.categorie === category;
-
-      });
-
-      displayProducts(filtered);
-
-    }
-
-  });
-
-});
-
 updateCart();
+
+loadCategories();
 
 loadProducts();
