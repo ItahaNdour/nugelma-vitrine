@@ -1,8 +1,9 @@
-# Nugelma Sprint 5.1
+# Nugelma Sprint 6.1 FULL
 
-Connexion au nouveau Firebase : nugelma-new-version.
+Direction retenue : B
+"Tout pour vos événements, cadeaux et achats du quotidien."
 
-À remplacer dans le repo :
+Fichiers à remplacer dans GitHub :
 - index.html
 - style.css
 - app.js

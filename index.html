@@ -4,22 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Nugelma | Packaging, déco & cadeaux</title>
-  <meta name="description" content="Nugelma vous propose une sélection de packaging alimentaire, décoration, cadeaux, accessoires et articles maison avec commande rapide via WhatsApp." />
+  <title>Nugelma | Événements, cadeaux & achats du quotidien</title>
+  <meta name="description" content="Nugelma vous accompagne pour vos événements, cadeaux, packaging et achats du quotidien au Sénégal. Commande simple via WhatsApp." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <header class="top-header">
-    <div class="logo">NUGELMA</div>
+    <div class="brand-block">
+      <div class="logo">NUGELMA</div>
+      <span class="tagline">Événements • Cadeaux • Maison</span>
+    </div>
 
     <button id="cartButton" class="cart-button" type="button" aria-label="Ouvrir le panier">
-      🛒
+      <span class="cart-icon">🛒</span>
       <span id="cartCount">0</span>
       <strong id="cartTotal">0 FCFA</strong>
     </button>
@@ -27,19 +30,28 @@
 
   <section class="hero">
     <div class="hero-content">
-      <p class="hero-label">Packaging • Déco • Cadeaux • Maison</p>
-      <h1>Préparez vos événements avec élégance.</h1>
+      <p class="hero-label">Nugelma New Version</p>
+      <h1>Tout pour vos événements, cadeaux et achats du quotidien.</h1>
       <p class="hero-text">
-        Découvrez les articles disponibles, ajoutez au panier et finalisez votre commande sur WhatsApp.
+        Décoration, packaging, cadeaux et accessoires livrés avec soin au Sénégal.
       </p>
+      <a href="#catalogue" class="hero-btn">Voir le catalogue</a>
     </div>
   </section>
 
   <section class="process" aria-label="Processus de commande">
     <div>✨<span>Sélection</span></div>
     <div>🛒<span>Panier</span></div>
-    <div>💳<span>Paiement Wave/OM</span></div>
+    <div>💳<span>Paiement</span></div>
     <div>🚚<span>Livraison</span></div>
+  </section>
+
+  <section id="catalogue" class="catalogue-head">
+    <div>
+      <p class="section-kicker">Catalogue</p>
+      <h2>Choisissez votre univers</h2>
+    </div>
+    <p>Les produits affichés viennent directement de Firebase.</p>
   </section>
 
   <section class="categories-wrapper">
@@ -55,7 +67,6 @@
       <button id="closeModal" class="close-btn" type="button">×</button>
 
       <h2>Votre commande</h2>
-
       <div id="cartItems"></div>
 
       <form id="orderForm" class="order-form">

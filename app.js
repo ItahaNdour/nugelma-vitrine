@@ -197,6 +197,10 @@ function displayProducts(list){
     const card = document.createElement("article");
     card.className = "product-card";
 
+    const stockText = typeof product.stock === "number"
+      ? `<span class="stock-pill">Stock : ${product.stock}</span>`
+      : "";
+
     card.innerHTML = `
       <img
         src="${product.imageUrl || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=70'}"
@@ -212,6 +216,10 @@ function displayProducts(list){
         <p class="product-description">
           ${escapeHtml(product.description || "Sélection Nugelma")}
         </p>
+
+        <div class="product-meta">
+          ${stockText}
+        </div>
 
         <span class="product-price">
           ${formatPrice(product.prix || 0)} ${shopSettings.devise}
